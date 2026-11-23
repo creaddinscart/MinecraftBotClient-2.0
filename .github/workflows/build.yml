@@ -1,5 +1,9 @@
 name: Build MBC-2.0 binaries (Windows / Linux / macOS)
 
+# PyInstaller cannot cross-compile, so each platform's binary is built on that
+# platform. This workflow runs build.py on the real Windows / Linux / macOS
+# runners and uploads the one-file binaries (client + mbc-collab joiner).
+
 on:
   push:
     branches: [main]
@@ -16,22 +20,31 @@ jobs:
             label: linux
           - os: windows-latest
             label: windows
-          - os: macos-14
-            label: macos-arm64
-          - os: macos-13
-            label: macos-intel
+          # macOS 二进制已在本地构建并验证，CI 默认不再编 macOS。
+          # 如需在 CI 里产出 macOS，取消下面两行注释即可；
+          # 注意：GitHub 当前的 macos-14 ARM64 runner 会报
+          # "The configuration 'macos-14-arm64-us-default' is not supported"，
+          # 所以 ARM64 用 macos-15 / macos-latest，Intel 用 macos-13。
+          # - os: macos-15          # Apple Silicon (arm64)
+          #   label: macos-arm64
+          # - os: macos-13          # Intel (x86_64)
+          #   label: macos-intel
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Build
         run: python build.py
+
       - name: Upload binaries
         uses: actions/upload-artifact@v4
         with:

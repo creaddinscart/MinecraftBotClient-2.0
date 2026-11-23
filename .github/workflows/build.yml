@@ -1,0 +1,40 @@
+name: Build MBC-2.0 binaries (Windows / Linux / macOS)
+
+on:
+  push:
+    branches: [main]
+    tags: ["2.*"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            label: linux
+          - os: windows-latest
+            label: windows
+          - os: macos-14
+            label: macos-arm64
+          - os: macos-13
+            label: macos-intel
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Build
+        run: python build.py
+      - name: Upload binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: MBC-2.0.0-${{ matrix.label }}
+          path: releases/2.0.0/**
+          if-no-files-found: error

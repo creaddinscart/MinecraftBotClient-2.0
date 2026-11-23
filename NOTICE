@@ -1,0 +1,31 @@
+NOTICE
+======
+
+MinecraftBotClient — MBC-2.0
+Made with CREADDINSCART STUDIO — https://www.shit.pub/studio/
+Author: CREADDINSCART STUDIO
+Jointly developed and published by: CREADDINSCART STUDIO,
+Mater Work, Loder Hankex, jake, jenmnmer, yig.
+
+Upstream
+--------
+MBC-2.0 is built on the MBC 1.0 protocol core from the MinecraftBotClient project:
+    https://github.com/creaddinscart/MinecraftBotClient
+The connection/protocol layer (src/network/connection_manager.py), the version
+checker, the logger, the i18n dictionary, the settings manager and the console UI
+originate from that upstream project (CREADDINSCART STUDIO) and retain their attribution.
+
+Code reuse (CREADDINSCART STUDIO condition 4)
+---------------------------------------------
+- src/features/bot_swarm.py — extends the upstream multi-bot swarm; the worker/auth
+  logic is from CREADDINSCART STUDIO (MinecraftBotClient).
+- src/client/minecraft_bot_client.py — client loop and command handling derive from the
+  upstream project; the collaborative swarm console (run_swarm + .collab) is new in 2.0.
+- src/features/operator_hub.py and src/ui/collab_client.py — new in MBC-2.0, published
+  by CREADDINSCART STUDIO and the joint authors.
+
+Licence
+-------
+MBC-2.0 is distributed under the MIT License plus the four CREADDINSCART STUDIO
+conditions of use (see LICENSE). The upstream 1.0 project's authors and copyright
+remain as stated above.
